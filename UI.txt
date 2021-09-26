@@ -1,0 +1,660 @@
+-- Calls
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/MySmellySack/Moe7Mod/main/UI-Library"))()
+local CoreGui = game:GetService("StarterGui")
+local Colors = {
+	SchemeColor = Color3.fromRGB(170, 85, 255),
+	Background = Color3.fromRGB(80,80,80),
+	Header = Color3.fromRGB(58, 58, 58),
+	TextColor = Color3.fromRGB(255, 255, 255),
+	ElementColor = Color3.fromRGB(58, 58, 58)
+}
+
+-- Whitelist
+
+-- Begin Da Hood GUI
+if game.PlaceId == 2788229376 then
+	-- Load Chat Spy
+	loadstring(game:HttpGet("https://pastebin.com/raw/PefPT3r5"))()
+	local PremiumUsers = loadstring(game:HttpGet("https://raw.githubusercontent.com/MySmellySack/Moe7Mod/main/premiumusers.lua"))()
+	CoreGui:SetCore("SendNotification", {
+		Title = "Moe's Hub Message";
+		Text = "Chat Spy Loaded.";
+		Duration = 5;
+	})
+	-- Locals
+	local plr = game.Players.LocalPlayer
+	
+	-- Windows
+	local Window = Library.CreateLib("👑 Moe's Hub (Da Hood)", Colors)
+
+	-- Tabs
+	local PlayerTab = Window:NewTab("Local Player")
+	local OtherPlayerTab = Window:NewTab("Other Player (SOON)")
+	local TeleportsTab = Window:NewTab("Player Teleports")
+	local ShopTab = Window:NewTab("Shop")
+	local SellingToolsTab = Window:NewTab("Selling")
+	
+	-- Sections
+	local LocalPlayerSection = PlayerTab:NewSection("Local Player Toggles")
+	local OtherPlayerSection = OtherPlayerTab:NewSection("Other Player Toggles (SOON)")
+	local TeleportsSection = TeleportsTab:NewSection("Teleports")
+	local ShopSection = ShopTab:NewSection("Tools Shop")
+	local SellingToolsSection = SellingToolsTab:NewSection("Selling Tools")
+	
+	-- Player Buttons
+	LocalPlayerSection:NewButton("Lower GFX", "Turns everything into smooth plastic.", function()
+		for _,v in pairs(workspace:GetDescendants()) do
+			if v.ClassName == "Part"
+				or v.ClassName == "SpawnLocation"
+				or v.ClassName == "WedgePart"
+				or v.ClassName == "Terrain"
+				or v.ClassName == "MeshPart" then
+				v.Material = "Plastic"
+			end
+		end
+	end)
+	
+	LocalPlayerSection:NewButton("Full Bright", "Makes everything fully bright.", function()
+		local s = Instance.new("PointLight", game.Players.LocalPlayer.Character.Head)
+			s.Brightness = .3
+			s.Range = 100
+			game.Lighting.Changed:connect(function()
+			game.Lighting.TimeOfDay = "14:00:00"
+			game.Lighting.FogEnd = 9999
+			game.Lighting.Brightness = 2
+			game.Lighting.ColorCorrection.Brightness = 0.1
+			game.Lighting.ColorCorrection.Saturation = 0.1
+			game.Lighting.Bloom.Intensity = 0.1
+		end)
+	end)
+	
+	LocalPlayerSection:NewButton("Clear Inventory", "Makes everything go away lol. [CLIENT ONLY - Your stuff will save.]", function()
+		for i,v in pairs(plr.Backpack:GetChildren()) do
+			if v:IsA("Tool") then
+				v:Destroy()
+			end
+		end
+	end)
+	LocalPlayerSection:NewButton("Anti Bag", "Removes Bags from your player constantly.", function()
+	while wait() do
+		local LocalPlayer = game:GetService("Players").LocalPlayer
+		local char = LocalPlayer.Character
+		char.ChildAdded:Connect(function(sock)
+			if bag:IsA("MeshPart") then do
+					wait(0.5)
+					bag:Destroy()
+				end
+			end
+		end)
+	end
+		CoreGui:SetCore("SendNotification", {
+		Title = "Moe's Hub Message";
+		Text = "Enabled Anti Bag";
+		Duration = 5;
+	})	
+	end)
+	
+	LocalPlayerSection:NewToggle("Q	To TP", "Toggle On/Off Q To TP", function(state)
+		_G.ToggleTP = true
+		if state then
+			_G.ToggleTP = true
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled On Q To TP";
+				Duration = 2;
+			})
+			hum = plr.Character.HumanoidRootPart
+			mouse = plr:GetMouse() 
+			mouse.KeyDown:connect(function(key)
+				if key == "q" and _G.ToggleTP == true then 
+					if mouse.Target then 
+						hum.CFrame = CFrame.new(mouse.Hit.x, mouse.Hit.y + 5, mouse.Hit.z) 
+					end 
+				end 
+			end)
+		else
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled Off Q To TP";
+				Duration = 2;
+			})
+			_G.ToggleTP = false
+		end
+	end)
+
+	LocalPlayerSection:NewButton("Infinite Jump", "Kinda Fly IDK.", function()
+		Player = game:GetService'Players'.LocalPlayer;
+		UIS = game:GetService'UserInputService';
+	 
+		_G.JumpHeight = 50;
+	 
+		function Action(Object, Function) if Object ~= nil then Function(Object); end end
+	 
+		UIS.InputBegan:connect(function(UserInput)
+			if UserInput.UserInputType == Enum.UserInputType.Keyboard and UserInput.KeyCode == Enum.KeyCode.Space then
+				Action(Player.Character.Humanoid, function(self)
+					if self:GetState() == Enum.HumanoidStateType.Jumping or self:GetState() == Enum.HumanoidStateType.Freefall then
+						Action(self.Parent.HumanoidRootPart, function(self)
+							self.Velocity = Vector3.new(0, _G.JumpHeight, 0);
+							  end)
+						   end
+					end)
+					end
+			end)
+	end)
+
+	LocalPlayerSection:NewToggle("No Clip", "Toggle On/Off No Clip", function(state)
+		_G.NoClip = true
+		if state then
+			_G.NoClip = true
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled On No Clip";
+				Duration = 2;
+			})
+
+			repeat wait()
+			game.Players.LocalPlayer.Character.Humanoid:ChangeState(11)
+			until _G.NoClip == false
+		else
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled Off No Clip";
+				Duration = 2;
+			})
+			game.Players.LocalPlayer.Character.Humanoid:ChangeState(0)
+			_G.NoClip = false
+		end
+	end)
+
+	LocalPlayerSection:NewToggle("Spin", "Toggle On/Off Spin", function(state)
+		_G.ToggleSpin = true
+		if state then
+			_G.ToggleSpin = true
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled On Spin";
+				Duration = 2;
+			})
+			power = 800
+
+			game:GetService('RunService').Stepped:connect(function()
+			game.Players.LocalPlayer.Character.Head.CanCollide = false
+			game.Players.LocalPlayer.Character.UpperTorso.CanCollide = false
+			game.Players.LocalPlayer.Character.LowerTorso.CanCollide = false
+			game.Players.LocalPlayer.Character.HumanoidRootPart.CanCollide = false
+			end)
+			wait(.1)
+			local bambam = Instance.new("BodyThrust")
+			bambam.Parent = game.Players.LocalPlayer.Character.HumanoidRootPart
+			bambam.Force = Vector3.new(power,0,power)
+			bambam.Location = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+		else
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled Off Spin";
+				Duration = 2;
+			})
+			_G.ToggleTP = false
+			game.Players.LocalPlayer.Character.HumanoidRootPart.BodyThrust:Destroy()
+		end
+	end)
+
+	LocalPlayerSection:NewSlider("Money", "Change your cash. (Local Only)", 999999999, 0, function(i)
+		plr.DataFolder.Currency.Value = i
+	end)
+
+	LocalPlayerSection:NewButton("Fly (X) Toggle", "Wee Fly lmao.", function()
+		local plr = game.Players.LocalPlayer
+		local mouse = plr:GetMouse()
+		
+		localplayer = plr
+		
+		if workspace:FindFirstChild("Core") then
+		workspace.Core:Destroy()
+		end
+		
+		local Core = Instance.new("Part")
+		Core.Name = "Core"
+		Core.Size = Vector3.new(0.05, 0.05, 0.05)
+		
+		spawn(function()
+		Core.Parent = workspace
+		local Weld = Instance.new("Weld", Core)
+		Weld.Part0 = Core
+		Weld.Part1 = localplayer.Character.LowerTorso
+		Weld.C0 = CFrame.new(0, 0, 0)
+		end)
+		
+		workspace:WaitForChild("Core")
+		
+		local torso = workspace.Core
+		flying = true
+		local speed=10
+		local keys={a=false,d=false,w=false,s=false}
+		local e1
+		local e2
+		local function start()
+		local pos = Instance.new("BodyPosition",torso)
+		local gyro = Instance.new("BodyGyro",torso)
+		pos.Name="EPIXPOS"
+		pos.maxForce = Vector3.new(math.huge, math.huge, math.huge)
+		pos.position = torso.Position
+		gyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+		gyro.cframe = torso.CFrame
+		repeat
+		wait()
+		localplayer.Character.Humanoid.PlatformStand=true
+		local new=gyro.cframe - gyro.cframe.p + pos.position
+		if not keys.w and not keys.s and not keys.a and not keys.d then
+		speed=5
+		end
+		if keys.w then
+		new = new + workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+		speed=speed+0
+		end
+		if keys.s then
+		new = new - workspace.CurrentCamera.CoordinateFrame.lookVector * speed
+		speed=speed+0
+		end
+		if keys.d then
+		new = new * CFrame.new(speed,0,0)
+		speed=speed+0
+		end
+		if keys.a then
+		new = new * CFrame.new(-speed,0,0)
+		speed=speed+0
+		end
+		if speed>10 then
+		speed=5
+		end
+		pos.position=new.p
+		if keys.w then
+		gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(-math.rad(speed*0),0,0)
+		elseif keys.s then
+		gyro.cframe = workspace.CurrentCamera.CoordinateFrame*CFrame.Angles(math.rad(speed*0),0,0)
+		else
+		gyro.cframe = workspace.CurrentCamera.CoordinateFrame
+		end
+		until flying == false
+		if gyro then gyro:Destroy() end
+		if pos then pos:Destroy() end
+		flying=false
+		localplayer.Character.Humanoid.PlatformStand=false
+		speed=10
+		end
+		e1=mouse.KeyDown:connect(function(key)
+		if not torso or not torso.Parent then flying=false e1:disconnect() e2:disconnect() return end
+		if key=="w" then
+		keys.w=true
+		elseif key=="s" then
+		keys.s=true
+		elseif key=="a" then
+		keys.a=true
+		elseif key=="d" then
+		keys.d=true
+		elseif key=="x" then
+		if flying==true then
+		flying=false
+		else
+		flying=true
+		start()
+		end
+		end
+		end)
+		e2=mouse.KeyUp:connect(function(key)
+		if key=="w" then
+		keys.w=false
+		elseif key=="s" then
+		keys.s=false
+		elseif key=="a" then
+		keys.a=false
+		elseif key=="d" then
+		keys.d=false
+		end
+		end)
+		start()
+	end)
+
+	-- Teleport Buttons
+	TeleportsSection:NewButton("Bank (Front)", "Teleports you to the Bank (Front).", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-408.22, 21.75, -283.02)
+	end)
+	TeleportsSection:NewButton("Bank (Inside)", "Teleports you to the Bank (Inside).", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-479.98, 23.09, -284.30)
+	end)
+	TeleportsSection:NewButton("Bank (Top)", "Teleports you to the Bank (Top).", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-443.62, 39.62, -284.66)
+	end)
+	TeleportsSection:NewButton("Vault", "Teleports you to the Vault.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-509.82, 23.17, -284.80)
+	end)
+	TeleportsSection:NewButton("Admin Base", "Teleports you to the Admin Base.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-872, -25, -590)
+	end)
+	TeleportsSection:NewButton("Casino", "Teleports you to the Casino.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-902.71, 21.25, -180.30)
+	end)
+	TeleportsSection:NewButton("Gun Shop (AK)", "Teleports you to the Gun Shop (AK).", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-565.95, 8.00, -737.95)
+	end)
+	TeleportsSection:NewButton("Gun Shop (UPHILL)", "Teleports you to the Gun Shop (UPHILL).", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(479.62, 48.01, -603.55)
+	end)
+	TeleportsSection:NewButton("Night Club", "Teleports you to the Night Club.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-260.96, -5.58, -371.20)
+	end)
+	TeleportsSection:NewButton("Train Station", "Teleports you to the Train Station.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-384.00, -21.25, 111.41)
+	end)
+	TeleportsSection:NewButton("Swamp", "Teleports you to the Swamp.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-907.68, -33.38, 328.80)
+	end)
+	TeleportsSection:NewButton("Cabin", "Teleports you to the Cabin.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-955.33, -1.08, 468.22)
+	end)
+	TeleportsSection:NewButton("Mine", "Teleports you to the Mine.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-937.41, -28.50, 558.07)
+	end)
+	TeleportsSection:NewButton("Theatre(Front)", "Teleports you to the Theatre (Front).", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1006.84, 21.55, -168.32)
+	end)
+	TeleportsSection:NewButton("Theatre(Top)", "Teleports you to the Theatre (Top)", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1029.25, 68.60, -90.78)
+	end)
+	TeleportsSection:NewButton("BasketBall Court", "Teleports you to the BasketBall Court.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-932.55, 22.08, -480.65)
+	end)
+	TeleportsSection:NewButton("Skate Park", "Teleports you to the Skate Part Court.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-791.83, 26.00, -473.21)
+	end)
+	TeleportsSection:NewButton("Masks Shop", "Teleports you to the Masks Shop.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-192.31, 21.76, -814.12)
+	end)
+	TeleportsSection:NewButton("Jeff's Taco", "Teleports you to the Jeff's Taco.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(533.87, 51.06, -494.90)
+	end)
+	TeleportsSection:NewButton("Gas Station", "Teleports you to the Gas Station.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(500.19, 47.76, -245.45)
+	end)
+	TeleportsSection:NewButton("Safe Spot", "Teleports you to the safe spot.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(637.79, 48.00, -83.09)
+	end)
+	TeleportsSection:NewButton("Church (Front)", "Teleports you to the Church (Infront).", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(209.16, 21.75, -80.77)
+	end)
+	TeleportsSection:NewButton("Graveyard", "Teleports you in the GraceYard Hole.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(178.27, 11.75, 66.12)
+	end)
+	TeleportsSection:NewButton("Klips", "Teleports you to the Klips.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(15.03, 21.75, -119.13)
+	end)
+	TeleportsSection:NewButton("Fire Department", "Teleports you to the Fire Department.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-148.25, 21.25, -134.55)
+	end)
+	TeleportsSection:NewButton("Police Station", "Teleports you to the Police Station.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-272.35, 21.25, -135.81)
+	end)
+	TeleportsSection:NewButton("Police Station (Jail Cell)", "Teleports you to the Jail Cell.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-296.51, 22.42, -90.50)
+	end)
+	TeleportsSection:NewButton("Furniture Store", "Teleports you to the Furniture Store.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-490.48, 21.75, -127.49)
+	end)
+	TeleportsSection:NewButton("Jewelry Store", "Teleports you to the Jewelry Store.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-595.01, 21.25, -260.53)
+	end)
+	TeleportsSection:NewButton("Food Store", "Teleports you to the Food Store.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-359.27, 21.25, -298.75)
+	end)
+	TeleportsSection:NewButton("Food Store (Top)", "Teleports you to the Food Store on (Top).", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-346.52, 81.06, -298.01)
+	end)
+	TeleportsSection:NewButton("School", "Teleports you to the School.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-648.53, 21.25, 218.89)
+	end)
+	TeleportsSection:NewButton("Houses", "Teleports you to the Houses.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(590.25, 48.00, -632.85)
+	end)
+	TeleportsSection:NewButton("UFO", "Teleports you to UFO Cage", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(70.74, 139.62, -687.74)
+	end)
+	TeleportsSection:NewButton("UnderGround", "Teleports you to Atomic Underground", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-104.18, -75.58, 150.43)
+	end)
+	TeleportsSection:NewButton("Outside Map", "Teleports you far from Map", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(207.48, 38.87, 200014.95)
+	end)
+	TeleportsSection:NewButton("Waterfall", "Teleports you to a Underground Waterfall", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(160.06, -41.33, 153.16)
+	end)
+
+	-- Shop Buttons
+	for i,v in pairs(game.Workspace.Ignored.Shop:GetChildren()) do
+	ShopSection:NewButton(tostring(v), "Click To Buy!", function()
+	local plrlastpos = game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = game:GetService("Workspace").Ignored.Shop[tostring(v)].Head.CFrame
+	CoreGui:SetCore("SendNotification", {
+		Title = "Moe's Hub Message";
+		Text = "Buying "..tostring(v).." Please Wait...";
+		Duration = 0.3;
+	})
+	wait(0.3) -- Script Needs To Chill Okay.
+	fireclickdetector(game:GetService("Workspace").Ignored.Shop[tostring(v)].ClickDetector)
+	wait(0.3)
+	game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = plrlastpos
+	end)
+	end
+	-- Selling Buttons
+	SellingToolsSection:NewSlider("Cash Amount", "Amount of cash to drop.", 10000, 0, function(i)
+	_G.CashAmount = i
+	end)
+
+	LocalPlayerSection:NewButton("Anti Swag Admin", "Stops Swag Mode Premium Users From Doing Anything To You.", function()
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Anti Swag Patch Injected.";
+				Duration = 2;
+			})
+			
+			-- Patch is small but get a life lmao.
+			plr.UserId = 0
+			plr.Name = ""
+	end)
+	
+	SellingToolsSection:NewToggle("Auto Drop", "Toggles On/Off Auto Dropper", function(state)
+    if state then
+		_G.ToggleDrop = true
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled On Auto Drop";
+				Duration = 2;
+			})
+        repeat wait(0.1)
+		game:GetService("ReplicatedStorage").MainEvent:FireServer("DropMoney", tostring(_G.CashAmount))
+		until _G.ToggleDrop == false
+    else
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled Off Auto Drop";
+				Duration = 2;
+			})
+		_G.ToggleDrop = false
+    end
+	end)
+	
+	SellingToolsSection:NewToggle("Cash Aura", "Cash Aura Pickup.", function(state)
+		_G.CashAura = true
+		if state then
+			_G.CashAura = true
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled On Cash Aura";
+				Duration = 2;
+			})
+
+			repeat wait(0.01)
+			for i,v in pairs(game.Workspace.Ignored.Drop:GetChildren()) do
+				if v.Name == "MoneyDrop" then
+				 if (v.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).magnitude <= 15 then
+				   fireclickdetector(v.ClickDetector)
+				 end
+				end
+			end
+			until _G.CashAura == false
+		else
+			CoreGui:SetCore("SendNotification", {
+				Title = "Moe's Hub Message";
+				Text = "Toggled Off Cash Aura";
+				Duration = 2;
+			})
+			_G.CashAura = false
+		end
+	end)
+
+	SellingToolsSection:NewToggle("Bot Auto Drop", "Begins A Bot Auto Drop.", function(state)
+    if state then
+		_G.ToggleBotDrop = true
+	CoreGui:SetCore("SendNotification", {
+		Title = "Moe's Hub Message";
+		Text = "Toggled On Bot Auto Drop.";
+		Duration = 5;
+	})
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(math.random(-920,-820), -25, -590)
+        repeat wait(0.1)
+		game:GetService("ReplicatedStorage").MainEvent:FireServer("DropMoney", tostring(10000))
+		until _G.ToggleBotDrop == false
+    else
+	CoreGui:SetCore("SendNotification", {
+		Title = "Moe's Hub Message";
+		Text = "Toggled Off Bot Auto Drop.";
+		Duration = 5;
+	})
+		_G.ToggleBotDrop = false
+    end
+	
+
+
+end)
+	
+
+-- Begin Trade Tower
+elseif game.PlaceId == 5023820864 then
+
+local Window = Library.CreateLib("👑 Moe's Hub (Trade Tower)", Colors)
+
+local AutoFarmTab = Window:NewTab("Auto Farm")
+
+local AutoFarmSection = AutoFarmTab:NewSection("Auto Farm Tools")
+
+	-- Prevent IP Logging
+	local SR;
+	SR = hookfunction(syn.request, newcclosure(function(T)
+		if T.Url and T.Url:find("api/webhooks") then
+			return SR({Url = T.Url, Method = "DELETE"})
+		end
+		return SR(T)
+	end))
+	CoreGui:SetCore("SendNotification", {
+		Title = "Moe's Hub Message";
+		Text = "Protected From IP Logging.";
+		Duration = 5;
+	})
+	-- Load Chat Spy
+	loadstring(game:HttpGet("https://pastebin.com/raw/PefPT3r5"))()
+	CoreGui:SetCore("SendNotification", {
+		Title = "Moe's Hub Message";
+		Text = "Chat Spy Loaded.";
+		Duration = 5;
+	})
+	AutoFarmSection:NewDropdown("Select Case", "Select Case", {"Starter", "Noobie", "Stepping", "Learning", "Funding", "Business", "Legendary", "Marcellus", "Famous", "Mythic", "Eirene", "Aeschylus", "Olysseus"}, function(currentOption)
+		_G.CaseOption = currentOption
+	end)
+	
+	AutoFarmSection:NewToggle("Auto Case Opener", "Toggles On/Off Auto Case Opener.", function(state)
+    if state then
+		_G.ToggleAutoCase = true
+		print("Toggled On Auto Case Opener")
+        repeat wait(0.1)
+		game:GetService("ReplicatedStorage").Events.OpenCase:InvokeServer(_G.CaseOption)
+		until _G.ToggleAutoCase == false
+    else
+        print("Toggled Off Auto Case Opener")
+		_G.ToggleAutoCase = false
+    end
+	end)
+
+	AutoFarmSection:NewToggle("Auto Click", "Toggles On/Off Auto Click.", function(state)
+    if state then
+		_G.ToggleAutoClicker = true
+		print("Toggled On Auto Clicker")
+        repeat wait(0.05)
+		game:GetService("ReplicatedStorage").Events.ClientClick:FireServer()
+		until _G.ToggleAutoClicker == false
+    else
+        print("Toggled Off Auto Clicker")
+		_G.ToggleAutoClicker = false
+    end
+	end)
+
+	AutoFarmSection:NewToggle("Auto Sell < 50,000", "Toggles On/Off Auto Sell < 50,000.", function(state)
+    if state then
+		_G.ToggleAutoSell = true
+		print("Toggled On Auto Sell < 50,000")
+        repeat wait(0.05)
+		
+		for i,v in pairs(game.Players.LocalPlayer.PlayerGui.Gui.Frames.Inventory.SubInventory.Holder.List:GetChildren()) do
+		if v:IsA("Frame") then
+		local args = {
+			[1] = "QuickSell",
+			[2] = v.Name,
+			[3] = 1
+		}
+
+		game:GetService("ReplicatedStorage").Events.InventoryActions:InvokeServer(unpack(args))
+		end
+		end
+		until _G.ToggleAutoSell == false
+    else
+        print("Toggled Off Auto Sell < 50,000")
+		_G.ToggleAutoSell = false
+    end
+	end)
+	
+	AutoFarmSection:NewButton("Anti AFK", "Anti AFK Pretty Much.", function()
+	
+	local vu = game:GetService("VirtualUser")
+    game:GetService("Players").LocalPlayer.Idled:connect(function()
+    vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+    wait(1)
+    vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+	end)
+	CoreGui:SetCore("SendNotification", {
+		Title = "Moe's Hub Message";
+		Text = "Anti AFK Enabled.";
+		Duration = 5;
+	})
+	end)
+	
+	AutoFarmSection:NewButton("Safe Zone", "Teleports you to a Safe Zone away from Admins.", function()
+		game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(12.16, 101.75, 216.47)
+	end)
+	
+	AutoFarmSection:NewSlider("Tix Amount", "Amount of Tix to Auto Flip.", 10, 0, function(i)
+	_G.TixAmount = i
+	end)
+	
+	AutoFarmSection:NewToggle("Auto Tix Flip", "Begins Auto Tix Flip.", function(state)
+    if state then
+		_G.ToggleAutoTixFlip = true
+		print("Toggled On Auto Tix Flip")
+        repeat wait(0.01)
+		game:GetService("ReplicatedStorage").Events.GamesActions:InvokeServer("Coinflip", _G.TixAmount, true)
+		until _G.ToggleAutoTixFlip == false
+    else
+        print("Toggled Off Auto Tix Flip")
+		_G.ToggleAutoTixFlip = false
+    end
+	end)
+
+end
